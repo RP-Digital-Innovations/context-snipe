@@ -1,6 +1,6 @@
 [package]
 name = "context-snipe"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 rust-version = "1.74"
 description = "Deterministic dependency + CVE context for AI coding tools, over the Model Context Protocol."

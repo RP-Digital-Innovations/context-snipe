@@ -39,8 +39,8 @@ A typical dependency scanner dumps hundreds of advisories, most of which don't a
 | Ecosystem | Resolved (preferred) | Direct-only fallback |
 |-----------|----------------------|----------------------|
 | Rust | `Cargo.lock` | — |
-| npm | `package-lock.json` (v1/v2/v3) | `package.json` |
-| Python | — | `requirements.txt` (pinned `==`) |
+| npm | `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json` (v1–v3) | `package.json` |
+| Python | `poetry.lock`, `uv.lock` | `requirements.txt` (pinned `==`) |
 | Go | `go.sum` | `go.mod` |
 
 ## Usage
@@ -94,7 +94,6 @@ This reports vulnerabilities for packages **present in your resolved dependency 
 ## Roadmap
 
 - Screen-capture + OCR as a second MCP tool (native Windows capture)
-- More lockfiles: `pnpm-lock.yaml`, `yarn.lock`, `poetry.lock`, `uv.lock`
 - Tauri tray app: autostart, one-click IDE registration, packaged `.msi`
 - macOS / Linux targets
 
