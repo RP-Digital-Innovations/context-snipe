@@ -317,3 +317,21 @@ fn parse_go_mod(path: &Path) -> Result<Vec<Package>, String> {
     }
     Ok(out)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn clean_semver_pins_ranges_and_rejects_unpinnable() {
+        assert_eq!(clean_semver("^4.18.2").as_deref(), Some("4.18.2"));
+        assert_eq!(clean_semver("~1.2.3").as_deref(), Some("1.2.3"));
+        assert_eq!(clean_semver(">=2.0.0").as_deref(), Some("2.0.0"));
+        assert_eq!(clean_semver("1.0.0").as_deref(), Some("1.0.0"));
+        assert_eq!(clean_semver("*"), None);
+        assert_eq!(clean_semver("latest"), None);
+        assert_eq!(clean_semver("workspace:*"), None);
+        // A bare major (no dot) is not a usable exact version.
+        assert_eq!(clean_semver("7"), None);
+    }
+}

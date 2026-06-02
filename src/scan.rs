@@ -94,7 +94,7 @@ pub fn check(path: &str, severity_min: Option<&str>) -> Result<String, String> {
         }
     }
     // Most severe packages first.
-    shown.sort_by(|a, b| max_sev(&b.1).cmp(&max_sev(&a.1)));
+    shown.sort_by_key(|entry| std::cmp::Reverse(max_sev(&entry.1)));
 
     if shown.is_empty() {
         let floor = severity_min

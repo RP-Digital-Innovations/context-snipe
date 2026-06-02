@@ -332,3 +332,67 @@ fn cvss_base_from_vector(vec: &str) -> Option<f32> {
     };
     Some((raw * 10.0).ceil() / 10.0) // CVSS round-up to 1 decimal
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn vuln(id: &str, sev: Severity, cve: &str, summary: &str) -> Vuln {
+        Vuln {
+            id: id.into(),
+            summary: summary.into(),
+            severity: sev,
+            aliases: vec![cve.into()],
+        }
+    }
+
+    #[test]
+    fn cvss_log4shell_scores_10() {
+        // CVE-2021-44228, published base score 10.0 (scope-changed branch).
+        let s = cvss_base_from_vector("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H").unwrap();
+        assert!((s - 10.0).abs() < 0.05, "expected 10.0, got {s}");
+        assert_eq!(severity_from_cvss(s), Severity::Critical);
+    }
+
+    #[test]
+    fn cvss_scope_unchanged_scores_7_5() {
+        // Network info-disclosure, published base score 7.5 (scope-unchanged branch).
+        let s = cvss_base_from_vector("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N").unwrap();
+        assert!((s - 7.5).abs() < 0.05, "expected 7.5, got {s}");
+        assert_eq!(severity_from_cvss(s), Severity::High);
+    }
+
+    #[test]
+    fn cvss_rejects_non_v3_and_garbage() {
+        assert!(cvss_base_from_vector("CVSS:2.0/AV:N/AC:L/Au:N/C:P/I:P/A:P").is_none());
+        assert!(cvss_base_from_vector("not-a-vector").is_none());
+        assert!(cvss_base_from_vector("CVSS:3.1/AV:X/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N").is_none());
+    }
+
+    #[test]
+    fn severity_thresholds() {
+        assert_eq!(severity_from_cvss(9.0), Severity::Critical);
+        assert_eq!(severity_from_cvss(8.9), Severity::High);
+        assert_eq!(severity_from_cvss(4.0), Severity::Medium);
+        assert_eq!(severity_from_cvss(0.1), Severity::Low);
+        assert_eq!(severity_from_cvss(0.0), Severity::Unknown);
+    }
+
+    #[test]
+    fn dedup_collapses_ghsa_and_pysec_sharing_a_cve() {
+        let pysec = vuln("PYSEC-2020-1", Severity::Unknown, "CVE-2020-0001", "");
+        let ghsa = vuln("GHSA-aaaa", Severity::High, "CVE-2020-0001", "Real summary");
+        let out = dedup_by_cve(vec![pysec, ghsa]);
+        assert_eq!(out.len(), 1, "GHSA + PYSEC for one CVE must collapse to one");
+        assert_eq!(out[0].id, "GHSA-aaaa", "GHSA is the preferred representative");
+        assert_eq!(out[0].severity, Severity::High, "higher severity is retained");
+        assert_eq!(out[0].summary, "Real summary", "non-empty summary is retained");
+    }
+
+    #[test]
+    fn dedup_keeps_distinct_cves_separate() {
+        let a = vuln("GHSA-a", Severity::Low, "CVE-1", "");
+        let b = vuln("GHSA-b", Severity::Low, "CVE-2", "");
+        assert_eq!(dedup_by_cve(vec![a, b]).len(), 2);
+    }
+}
