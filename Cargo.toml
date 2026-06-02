@@ -1,0 +1,27 @@
+[package]
+name = "context-snipe"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+description = "Deterministic dependency + CVE context for AI coding tools, over the Model Context Protocol."
+license = "MIT"
+repository = "https://github.com/RP-Digital-Innovations/context-snipe"
+authors = ["Enmanuel Solano <emmanuels@rpdi.us>"]
+
+[[bin]]
+name = "context-snipe"
+path = "src/main.rs"
+
+[dependencies]
+serde_json = "1"
+toml = "0.8"
+ureq = { version = "2", default-features = false, features = ["json", "native-tls", "gzip"] }
+native-tls = "0.2"
+
+# Tiny, fast, self-contained release binary — matches the "<8 MB, sub-ms" pitch.
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"

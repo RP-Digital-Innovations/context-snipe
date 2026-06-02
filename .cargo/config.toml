@@ -1,0 +1,5 @@
+# Statically link the CRT + libgcc/winpthread so the release .exe is fully
+# self-contained — it must launch when spawned by an MCP client (Claude Desktop,
+# Cursor, etc.) that has no MinGW on its PATH.
+[build]
+rustflags = ["-C", "target-feature=+crt-static"]
