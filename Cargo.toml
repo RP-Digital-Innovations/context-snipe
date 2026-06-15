@@ -1,6 +1,6 @@
 [package]
 name = "context-snipe"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 rust-version = "1.74"
 description = "Deterministic dependency + CVE context for AI coding tools, over the Model Context Protocol."
@@ -15,8 +15,7 @@ path = "src/main.rs"
 [dependencies]
 serde_json = "1"
 toml = "0.8"
-ureq = { version = "2", default-features = false, features = ["json", "native-tls", "gzip"] }
-native-tls = "0.2"
+ureq = { version = "2", default-features = false, features = ["json", "tls", "gzip"] }
 
 # Tiny, fast, self-contained release binary — matches the "<8 MB, sub-ms" pitch.
 [profile.release]

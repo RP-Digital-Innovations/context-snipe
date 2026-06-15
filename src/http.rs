@@ -1,35 +1,26 @@
 //! Minimal JSON-over-HTTPS POST helper.
 //!
-//! Uses `ureq` with the native TLS stack (SChannel on Windows), so the binary
-//! builds without a C toolchain and carries no OpenSSL baggage. A single shared
-//! agent is reused for connection pooling.
+//! Uses `ureq` with the `tls` feature (rustls), so the binary carries its own
+//! TLS stack with no OpenSSL or system-crypto dependency — works identically on
+//! Windows, macOS, and Linux (including musl).
 
-use std::sync::{Arc, OnceLock};
+use std::sync::OnceLock;
 use std::time::Duration;
 
 use serde_json::Value;
 use ureq::Agent;
 
-/// Lazily-built shared agent. TLS init can fail (rare), so the result is cached
-/// as a `Result` and surfaced as an error to the caller — never a panic, which
-/// under `panic = "abort"` would take the whole MCP server down with it.
-fn agent() -> Result<&'static Agent, String> {
-    static AGENT: OnceLock<Result<Agent, String>> = OnceLock::new();
-    AGENT
-        .get_or_init(|| {
-            let connector = native_tls::TlsConnector::new()
-                .map_err(|e| format!("TLS initialization failed: {e}"))?;
-            Ok(ureq::AgentBuilder::new()
-                .tls_connector(Arc::new(connector))
-                .timeout(Duration::from_secs(25))
-                .build())
-        })
-        .as_ref()
-        .map_err(|e| e.clone())
+fn agent() -> &'static Agent {
+    static AGENT: OnceLock<Agent> = OnceLock::new();
+    AGENT.get_or_init(|| {
+        ureq::AgentBuilder::new()
+            .timeout(Duration::from_secs(25))
+            .build()
+    })
 }
 
 pub fn post_json(url: &str, body: &Value) -> Result<Value, String> {
-    let resp = agent()?
+    let resp = agent()
         .post(url)
         .set("Content-Type", "application/json")
         .set("User-Agent", concat!("context-snipe/", env!("CARGO_PKG_VERSION")))
