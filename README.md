@@ -52,15 +52,31 @@ Your scanner (Dependabot, Snyk, whatever) floods you with 200 warnings, most of 
 
 ## Install in 30 seconds
 
-**macOS / Linux:**
+**macOS / Linux** — one line, picks the right binary for your platform:
 ```bash
-# Download the binary for your platform
-curl -L https://github.com/RP-Digital-Innovations/context-snipe/releases/latest/download/context-snipe-$(uname -m)-$(uname -s | tr '[:upper:]' '[:lower:]') -o context-snipe
-chmod +x context-snipe && sudo mv context-snipe /usr/local/bin/
+curl -fsSL https://raw.githubusercontent.com/RP-Digital-Innovations/context-snipe/main/install.sh | sh
 ```
 
-**Windows:**
-Download [`context-snipe-x86_64-pc-windows.exe`](https://github.com/RP-Digital-Innovations/context-snipe/releases/latest) and add it to your PATH.
+**Windows** (PowerShell):
+```powershell
+irm https://raw.githubusercontent.com/RP-Digital-Innovations/context-snipe/main/install.ps1 | iex
+```
+
+<details>
+<summary>Manual download</summary>
+
+Grab the binary for your platform from the [latest release](https://github.com/RP-Digital-Innovations/context-snipe/releases/latest):
+
+| Platform | Asset |
+|----------|-------|
+| macOS (Apple Silicon) | `context-snipe-aarch64-apple-darwin` |
+| macOS (Intel) | `context-snipe-x86_64-apple-darwin` |
+| Linux x86_64 | `context-snipe-x86_64-linux` |
+| Linux ARM64 | `context-snipe-aarch64-linux` |
+| Windows x86_64 | `context-snipe-x86_64-pc-windows.exe` |
+
+`chmod +x` it and move it onto your PATH.
+</details>
 
 **Verify:**
 ```bash

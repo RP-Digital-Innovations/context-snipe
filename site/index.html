@@ -150,6 +150,19 @@
     .download-link + .download-link { margin-top: 6px; }
     .download-link:hover { background: var(--accent-dim); text-decoration: none; }
 
+    /* ── One-liner install ─────────────────────────────── */
+    .install-oneliners { display: flex; flex-direction: column; gap: 12px; margin-bottom: 2.5rem; }
+    .oneliner {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .oneliner-os { display: block; font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+    .oneliner code {
+      display: block; font-family: var(--mono); font-size: 13px; color: var(--text);
+      background: var(--bg); border: 1px solid var(--border-subtle); border-radius: 6px;
+      padding: 10px 12px; overflow-x: auto; white-space: pre; cursor: text;
+    }
+
     .mcp-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
     .mcp-block-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--surface2); }
     .mcp-block-title { font-family: var(--mono); font-size: 12px; color: var(--muted); }
@@ -283,8 +296,21 @@ Note: presence is not the same as exploitability — confirm the vulnerable code
 <section id="install">
   <div class="section-inner">
     <div class="section-label">Install</div>
-    <h2>One binary. Drop it in.</h2>
-    <p class="section-sub">Download the binary for your platform, make it executable, and put it on your PATH. No package manager required.</p>
+    <h2>One line. Drop it in.</h2>
+    <p class="section-sub">One command grabs the right binary for your platform and puts it on your PATH. No package manager, no build, no runtime.</p>
+
+    <div class="install-oneliners">
+      <div class="oneliner">
+        <span class="oneliner-os">macOS / Linux</span>
+        <code>curl -fsSL https://raw.githubusercontent.com/RP-Digital-Innovations/context-snipe/main/install.sh | sh</code>
+      </div>
+      <div class="oneliner">
+        <span class="oneliner-os">Windows · PowerShell</span>
+        <code>irm https://raw.githubusercontent.com/RP-Digital-Innovations/context-snipe/main/install.ps1 | iex</code>
+      </div>
+    </div>
+
+    <p class="section-sub" style="margin-bottom: 1.5rem;">Prefer to grab a binary by hand? Pick your platform:</p>
 
     <div class="install-grid">
       <div class="install-card">

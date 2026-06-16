@@ -6,7 +6,14 @@ rust-version = "1.74"
 description = "Deterministic dependency + CVE context for AI coding tools, over the Model Context Protocol."
 license = "MIT"
 repository = "https://github.com/RP-Digital-Innovations/context-snipe"
+homepage = "https://context-snipe.rpdi.us"
 authors = ["Enmanuel Solano <emmanuels@rpdi.us>"]
+readme = "README.md"
+keywords = ["mcp", "security", "cve", "dependencies", "cli"]
+categories = ["command-line-utilities", "development-tools"]
+# Whitelist what ships to crates.io — keep internal docs (CLAUDE.md), the
+# landing page, editor config, and CI workflows OUT of the public package.
+include = ["src/**", "Cargo.toml", "README.md", "LICENSE*"]
 
 [[bin]]
 name = "context-snipe"
@@ -24,3 +31,29 @@ lto = true
 codegen-units = 1
 strip = true
 panic = "abort"
+
+# `cargo binstall context-snipe` — fetch the prebuilt release binary instead of
+# compiling. Asset names are non-uniform, so each target is mapped explicitly.
+[package.metadata.binstall]
+pkg-fmt = "bin"
+
+[package.metadata.binstall.overrides.x86_64-apple-darwin]
+pkg-url = "{ repo }/releases/download/v{ version }/context-snipe-x86_64-apple-darwin"
+
+[package.metadata.binstall.overrides.aarch64-apple-darwin]
+pkg-url = "{ repo }/releases/download/v{ version }/context-snipe-aarch64-apple-darwin"
+
+[package.metadata.binstall.overrides.x86_64-unknown-linux-musl]
+pkg-url = "{ repo }/releases/download/v{ version }/context-snipe-x86_64-linux"
+
+[package.metadata.binstall.overrides.x86_64-unknown-linux-gnu]
+pkg-url = "{ repo }/releases/download/v{ version }/context-snipe-x86_64-linux"
+
+[package.metadata.binstall.overrides.aarch64-unknown-linux-musl]
+pkg-url = "{ repo }/releases/download/v{ version }/context-snipe-aarch64-linux"
+
+[package.metadata.binstall.overrides.aarch64-unknown-linux-gnu]
+pkg-url = "{ repo }/releases/download/v{ version }/context-snipe-aarch64-linux"
+
+[package.metadata.binstall.overrides.x86_64-pc-windows-msvc]
+pkg-url = "{ repo }/releases/download/v{ version }/context-snipe-x86_64-pc-windows.exe"

@@ -1,0 +1,9 @@
+target/
+.git/
+.github/
+.claude/
+site/
+*.md
+!README.md
+install.sh
+install.ps1

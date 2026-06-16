@@ -1,0 +1,7 @@
+# Shell scripts and the Dockerfile must keep LF endings to stay runnable on
+# macOS/Linux — a CRLF shebang line breaks with "bad interpreter".
+*.sh    text eol=lf
+install.sh text eol=lf
+Dockerfile text eol=lf
+# PowerShell is fine with CRLF on Windows.
+*.ps1   text eol=crlf
