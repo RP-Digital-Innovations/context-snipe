@@ -73,28 +73,28 @@ security scanning feature. V2 will eventually bundle this or call it.
 
 ---
 
-### 3. `context-snipe-astro` (PRIVATE) — the live website
-Deployed at: https://context-snipe.rpdi.us
-Built with: Astro 6 + Cloudflare Pages
+### 3. The website — TWO repos existed (a mess; being consolidated onto Astro)
+Live at: https://context-snipe.rpdi.us (Cloudflare Pages project named
+"context-snipe-v2").
 
-This is already live and already good. Don't rebuild it.
+⚠️ An AI built the marketing site TWICE, in two frameworks. Don't be fooled
+(this earlier doc claimed the Astro repo was live — it was NOT):
+- `context-snipe-landing` (PRIVATE, **React + Vite**) — what is CURRENTLY
+  DEPLOYED to the domain. The Cloudflare project deploys from THIS repo. Being
+  RETIRED.
+- `context-snipe-astro` (PRIVATE, **Astro**) — the version we are standardizing
+  on. As of 2026-06-17 its homepage is the open-source CLI landing page (the V2
+  paid pitch was removed for now). Cloudflare must be re-pointed to deploy this
+  repo; then `context-snipe-landing` is archived.
 
-What it has:
-- Marketing landing page with the hero "Your AI coding tools are blind."
-- Pricing section: Free / Pro $9/mo / Security $29/mo
-- `/api/license/activate` — looks up Stripe session, returns license key from
-  Supabase
-- `/api/telemetry` — telemetry ingestion endpoint
-- `/api/waitlist` — waitlist signup
-- `/api/webhook` — Stripe webhook (creates license record in Supabase on
-  successful payment)
-- `/activate` page — post-purchase page where user gets their license key
-- `/getting-started` page — onboarding
+Pages (Astro repo): `index` (CLI landing), `/activate`, `/getting-started`,
+`/p/[id]`, plus API routes `/api/license/{activate,validate}`, `/api/telemetry`,
+`/api/waitlist`, `/api/webhook` (Stripe).
 
-Backend stack: Supabase (database for licenses), Stripe (payments).
-
-**Known gap**: Stripe + Supabase env vars need to be set in Cloudflare Pages
-dashboard for the payment flow to work end-to-end.
+Backend stack: Supabase (license storage), Stripe (payments). Required env vars
+(set on the Cloudflare Pages project): `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`,
+`STRIPE_WEBHOOK_SECRET`, `STRIPE_{PRO,SECURITY}_{MONTHLY,ANNUAL}_PRICE_ID`.
+See `context-snipe-astro/.env.example`.
 
 ---
 
@@ -110,7 +110,7 @@ Users download from here. Linked from the website.
 | Thing | Status |
 |-------|--------|
 | Open-source CLI (context-snipe) | Working. v0.3.0 released. CI/CD live. |
-| Website (context-snipe-astro) | Live at context-snipe.rpdi.us. Looks good. |
+| Website | Live = `context-snipe-landing` (React). Consolidating onto `context-snipe-astro` (Astro); re-point Cloudflare, then archive React repo. |
 | V2 app — screen capture | Code exists, compiled, released up to v0.1.2 |
 | V2 app — IDE auto-registration | Code exists |
 | V2 app — MCP server | Code exists |
