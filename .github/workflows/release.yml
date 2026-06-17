@@ -21,7 +21,7 @@ jobs:
             binary: target/x86_64-pc-windows-msvc/release/context-snipe.exe
             artifact: context-snipe-x86_64-pc-windows.exe
 
-          - os: macos-13
+          - os: macos-latest
             target: x86_64-apple-darwin
             binary: target/x86_64-apple-darwin/release/context-snipe
             artifact: context-snipe-x86_64-apple-darwin
