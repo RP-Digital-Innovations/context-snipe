@@ -62,6 +62,12 @@ curl -fsSL https://raw.githubusercontent.com/RP-Digital-Innovations/context-snip
 irm https://raw.githubusercontent.com/RP-Digital-Innovations/context-snipe/main/install.ps1 | iex
 ```
 
+**Rust users** — from [crates.io](https://crates.io/crates/context-snipe):
+```bash
+cargo install context-snipe        # build from source
+cargo binstall context-snipe       # or grab the prebuilt binary, no compile
+```
+
 <details>
 <summary>Manual download</summary>
 
